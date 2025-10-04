@@ -1,21 +1,66 @@
+from csv import reader
+
 def carica_da_file(file_path):
-    """Carica i libri dal file"""
-    # TODO
+    try:
+        daLeggere= open(file_path, "r", encoding="utf-8")
+        numsezioni= int(daLeggere.readline())
+        filecsv= reader(daLeggere)
+        biblioteca=[]
+        for riga in filecsv:
+            diz= dict()
+            diz["nomelibro"]= riga[0]
+            diz["autore"]= riga[1]
+            diz["anno"]= int(riga[2])
+            diz["pagine"] = int(riga[3])
+            diz["sezione"] = int(riga[4])
+            biblioteca.append(diz)
+        daLeggere.close()
+        return biblioteca
+    except FileNotFoundError:
+        return None
+
+
 
 
 def aggiungi_libro(biblioteca, titolo, autore, anno, pagine, sezione, file_path):
-    """Aggiunge un libro nella biblioteca"""
-    # TODO
+   diz= dict()
+   diz["nomelibro"] = titolo
+   diz["autore"] = autore
+   diz["anno"] = anno
+   diz["pagine"] = pagine
+   diz["sezione"] = sezione
+   biblioteca.append(diz)
+   daScrivere = open(file_path, "a")
+   for valore in diz.values():
+       daScrivere.write(str(valore))
+       daScrivere.write(",")
+   daScrivere.close()
+
 
 
 def cerca_libro(biblioteca, titolo):
-    """Cerca un libro nella biblioteca dato il titolo"""
-    # TODO
+    trovato = False
+    for libro in biblioteca:
+        if libro["nomelibro"].lower()== titolo.lower():
+            trovato= True
+            risultato= f"{libro["nomelibro"]},{libro["autore"]},{str(libro["anno"])},{str(libro["pagine"])},{str(libro["sezione"])}"
+            return risultato
+        if not trovato:
+            return "libro non trovato"
 
 
 def elenco_libri_sezione_per_titolo(biblioteca, sezione):
-    """Ordina i titoli di una data sezione della biblioteca in ordine alfabetico"""
-    # TODO
+    titoliscelti =[]
+    for libro in biblioteca:
+        if libro["sezione"]== sezione:
+            titoliscelti.append(libro["nomelibro"])
+    if not titoliscelti:
+        return None
+    ordinati = sorted(titoliscelti)
+    return ordinati
+
+
+
 
 
 def main():
